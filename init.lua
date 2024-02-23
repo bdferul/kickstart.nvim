@@ -44,6 +44,7 @@ P.S. You can delete this when you're done too. It's your config now :)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
@@ -69,6 +70,8 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
 
+  { "ellisonleao/gruvbox.nvim", priority = 1000,  config = true },
+
   -- Git related plugins
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
@@ -88,7 +91,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',       opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -124,7 +127,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  { 'folke/which-key.nvim',     opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -219,6 +222,11 @@ require('lazy').setup({
     'nvim-lualine/lualine.nvim',
     -- See `:help lualine.txt`
     opts = {
+      sections = {
+        lualine_x = {
+          "ctime"
+        }
+      },
       options = {
         icons_enabled = false,
         theme = 'auto',
@@ -285,6 +293,22 @@ require('lazy').setup({
   -- { import = 'custom.plugins' },
 }, {})
 
+vim.o.background = "dark" -- or "light" for light mode
+vim.cmd([[colorscheme gruvbox]])
+
+local lspconfig = require('lspconfig')
+lspconfig.hls.setup {
+  haskell = {
+    plugin = {
+      span = {
+        globalOn = false
+      }
+    }
+  },
+}
+
+vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]]
+
 -- [[ Setting options ]]
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
@@ -323,6 +347,8 @@ vim.o.timeoutlen = 300
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
 
+vim.opt.shiftwidth = 4
+vim.opt.smarttab = true
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
